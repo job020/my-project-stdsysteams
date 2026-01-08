@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Culture & Heritage | YALA LUXURY TRAVEL</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Prompt:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- 1. SHARED VARIABLES (ชุดเดิม) --- */
+        :root {
+            --primary: #153e35;      
+            --secondary: #d4af37;    
+            --bg-light: #fdfbf7;     
+            --text-dark: #333333;
+            --text-gray: #666666;
+            --white: #ffffff;
+            --shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.8; /* เพิ่มความสูงบรรทัดให้อ่านสบายตาขึ้นสำหรับบทความ */
+            padding-top: 80px; 
+        }
+
+        h1, h2, h3, .logo-text { font-family: 'Cormorant Garamond', serif; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- 2. NAVBAR (ชุดเดิม) --- */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; height: 80px;
+            background-color: var(--white);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .logo-text {
+            font-size: 1.8rem; font-weight: 700; color: var(--primary);
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+        .logo-text span { color: var(--secondary); }
+
+        .nav-menu { display: flex; gap: 30px; }
+        .nav-link { font-size: 1rem; color: var(--text-dark); font-weight: 500; position: relative; }
+        .nav-link:hover, .nav-link.active { color: var(--secondary); }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -5px; left: 0; background-color: var(--secondary); transition: 0.3s;
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        
+        .btn-booking {
+            padding: 10px 25px; background-color: var(--primary); color: var(--white);
+            border-radius: 50px; font-weight: 500;
+        }
+        .btn-booking:hover { background-color: var(--secondary); }
+
+        /* --- 3. PAGE HEADER --- */
+        .page-header {
+            height: 50vh;
+            /* เปลี่ยนรูปพื้นหลังให้สื่อถึงวัฒนธรรม (เช่น ผ้า ผ้าบาติก หรืองานศิลป์) */
+            background: linear-gradient(rgba(21, 62, 53, 0.7), rgba(21, 62, 53, 0.7)),
+                        url('https://images.unsplash.com/photo-1590059595229-844c568db8c0?q=80&w=1920&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; color: var(--white);
+        }
+
+        .page-header h1 { font-size: 4rem; margin-bottom: 10px; }
+        .page-header p { font-size: 1.2rem; font-weight: 300; letter-spacing: 1px; }
+
+        /* --- 4. ZIG-ZAG LAYOUT (New for Culture Page) --- */
+        .culture-section {
+            padding: 80px 10%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .intro-text {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+        .intro-text h2 { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
+        .intro-text p { font-size: 1.1rem; color: var(--text-gray); }
+
+        .story-row {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 100px;
+        }
+
+        /* สลับรูปไปขวา สำหรับแถวคู่ */
+        .story-row.reverse { flex-direction: row-reverse; }
+
+        .story-img {
+            flex: 1;
+            height: 400px;
+            border-radius: 10px; /* มุมมนเล็กน้อย แต่ให้ด้านหนึ่งเป็นมุมตัด */
+            overflow: hidden;
+            box-shadow: 20px 20px 0px var(--secondary); /* ลูกเล่นกรอบลอยสีทอง */
+            position: relative;
+        }
+
+        .story-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .story-img:hover img { transform: scale(1.1); }
+
+        .story-content { flex: 1; }
+
+        .story-tag {
+            color: var(--secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .story-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .story-desc {
+            color: var(--text-dark);
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+
+        .btn-text {
+            color: var(--primary);
+            font-weight: 600;
+            border-bottom: 1px solid var(--secondary);
+            padding-bottom: 2px;
+        }
+        .btn-text:hover { color: var(--secondary); }
+
+        /* --- 5. QUOTE SECTION --- */
+        .quote-section {
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+        }
+        
+        .quote-icon { font-size: 2rem; color: var(--secondary); margin-bottom: 20px; }
+        .quote-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-style: italic;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .quote-author { margin-top: 20px; font-size: 1rem; color: #aaa; }
+
+        /* --- 6. FOOTER (Shared) --- */
+        footer {
+            background-color: var(--primary); color: var(--white);
+            text-align: center; padding: 40px;
+        }
+
+        /* Mobile */
+        .hamburger { display: none; cursor: pointer; font-size: 1.5rem; }
+        @media (max-width: 900px) {
+            .story-row, .story-row.reverse { flex-direction: column; gap: 30px; margin-bottom: 60px; }
+            .story-img { width: 100%; height: 300px; box-shadow: 10px 10px 0px var(--secondary); }
+            .navbar { padding: 0 20px; }
+            .hamburger { display: block; }
+            .nav-menu {
+                position: absolute; top: 80px; left: -100%; width: 100%;
+                background-color: var(--white); flex-direction: column;
+                align-items: center; padding: 40px 0; transition: 0.4s;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            .nav-menu.active { left: 0; }
+            .page-header h1 { font-size: 3rem; }
+            .culture-section { padding: 60px 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">
+            <i class="fas fa-gem" style="font-size: 24px; color: var(--secondary);"></i> 
+            <a href="index.html" class="logo-text">YALA <span>PRIDE</span></a>
+        </div>
+
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="index.html" class="nav-link">หน้าแรก</a></li>
+            <li><a href="places.html" class="nav-link">สถานที่ท่องเที่ยว</a></li>
+            <li><a href="culture.html" class="nav-link active">วัฒนธรรม</a></li>
+            <li><a href="#" class="nav-link">อาหาร</a></li>
+            <li><a href="#" class="btn-booking">ติดต่อเรา</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header">
+        <h1>Cultural Heritage</h1>
+        <p>เสน่ห์แห่งพหุวัฒนธรรม ที่หลอมรวมเป็นหนึ่งเดียว</p>
+    </header>
+
+    <section class="culture-section">
+        
+        <div class="intro-text">
+            <h2>The Harmony of Yala</h2>
+            <p>ยะลาไม่ได้มีดีแค่ธรรมชาติที่สวยงาม แต่ยังเป็นดินแดนที่ผู้คนจากหลากหลายความเชื่อ ทั้งไทยพุทธ ไทยมุสลิม และไทยเชื้อสายจีน อาศัยอยู่ร่วมกันอย่างสันติ ก่อให้เกิดวัฒนธรรมที่เป็นเอกลักษณ์ ทั้งด้านสถาปัตยกรรม เครื่องแต่งกาย และประเพณีที่สืบทอดกันมายาวนาน</p>
+        </div>
+
+        <div class="story-row">
+            <div class="story-img">
+                <img src="https://images.unsplash.com/photo-1574625215664-9ee36d3dc302?q=80&w=800&auto=format&fit=crop" alt="Batik Cloth">
+            </div>
+            <div class="story-content">
+                <span class="story-tag">Art & Craft</span>
+                <h3 class="story-title">ผ้าปาเต๊ะ และมัดย้อม</h3>
+                <p class="story-desc">
+                    ศิลปะบนผืนผ้าที่เป็นอัตลักษณ์ของชายแดนใต้ ลวดลายสีสันสดใสที่ได้รับอิทธิพลจากวัฒนธรรมมลายู ผสมผสานกับภูมิปัญญาท้องถิ่น "ผ้าปาเต๊ะยะลา" มีเอกลักษณ์เฉพาะตัวด้วยลายดอกไม้และสีธรรมชาติ สะท้อนความมีชีวิตชีวาของผู้คนในพื้นที่ นิยมนำมาตัดเย็บเป็นเสื้อผ้าสวมใส่ในงานมงคลและชีวิตประจำวัน
+                </p>
+                <a href="#" class="btn-text">ชมแกลเลอรี่ภาพ <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <div class="story-row reverse">
+            <div class="story-img">
+                <img src="https://images.unsplash.com/photo-1552353617-3bfd67f72cb5?q=80&w=800&auto=format&fit=crop" alt="Bird Festival">
+            </div>
+            <div class="story-content">
+                <span class="story-tag">Festival</span>
+                <h3 class="story-title">มหกรรมนกเขาชวาเสียง</h3>
+                <p class="story-desc">
+                    งานประเพณีที่ยิ่งใหญ่ที่สุดงานหนึ่งในอาเซียน จัดขึ้นเป็นประจำทุกปี ณ สวนขวัญเมือง ยะลาถือเป็นเมืองหลวงของวงการนกเขาชวา ที่ซึ่งผู้เลี้ยงนกจากทั่วสารทิศ ทั้งไทย มาเลเซีย สิงคโปร์ และอินโดนีเซีย มารวมตัวกันเพื่อประชันเสียงร้องอันไพเราะกังวาน เป็นสัญลักษณ์แห่งมิตรภาพไร้พรมแดน
+                </p>
+                <a href="#" class="btn-text">ดูตารางกิจกรรม <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <div class="story-row">
+            <div class="story-img">
+                <img src="https://images.unsplash.com/photo-1597816047262-6323a9d94101?q=80&w=800&auto=format&fit=crop" alt="Architecture">
+            </div>
+            <div class="story-content">
+                <span class="story-tag">Architecture</span>
+                <h3 class="story-title">ผังเมือง และตึกเก่า</h3>
+                <p class="story-desc">
+                    ยะลาได้รับการยกย่องว่าเป็นเมืองที่มีการวางผังเมืองสวยที่สุดในประเทศไทย ด้วยรูปแบบ "ใยแมงมุม" ที่แผ่ออกจากศาลหลักเมือง นอกจากนี้ในย่านเมืองเก่าและเบตง ยังเต็มไปด้วยอาคารสถาปัตยกรรมชิโน-โปรตุกีส ที่ผสมผสานความคลาสสิกของตะวันตกและตะวันออกไว้อย่างลงตัว
+                </p>
+                <a href="#" class="btn-text">อ่านประวัติเมือง <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="quote-section">
+        <i class="fas fa-quote-left quote-icon"></i>
+        <p class="quote-text">
+            "ความงามที่แท้จริงของยะลา ไม่ได้อยู่ที่สถานที่ แต่อยู่ที่รอยยิ้มและการอยู่ร่วมกันของผู้คน"
+        </p>
+        <p class="quote-author">- นักเดินทางนิรนาม -</p>
+    </section>
+
+    <footer>
+        <div style="font-size: 2rem; margin-bottom: 20px; font-family: 'Cormorant Garamond', serif;">
+            YALA PRIDE
+        </div>
+        <div style="margin-bottom: 20px;">
+            <i class="fab fa-facebook fa-lg" style="margin: 0 10px;"></i>
+            <i class="fab fa-instagram fa-lg" style="margin: 0 10px;"></i>
+            <i class="fab fa-twitter fa-lg" style="margin: 0 10px;"></i>
+        </div>
+        <p>&copy; 2024 Yala Provincial Tourism. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Script Mobile Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
