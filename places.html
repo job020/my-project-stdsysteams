@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destinations | YALA LUXURY TRAVEL</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Prompt:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- 1. SHARED CSS VARIABLES (เหมือนหน้า Index เป๊ะ) --- */
+        :root {
+            --primary: #153e35;      
+            --secondary: #d4af37;    
+            --bg-light: #fdfbf7;     
+            --text-dark: #333333;
+            --text-gray: #666666;
+            --white: #ffffff;
+            --shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding-top: 80px; /* เว้นที่ให้ Navbar */
+        }
+
+        h1, h2, h3, .logo-text { font-family: 'Cormorant Garamond', serif; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- 2. NAVBAR (Shared Component) --- */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 80px;
+            background-color: var(--white);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .brand { display: flex; align-items: center; gap: 10px; }
+        
+        .logo-text {
+            font-size: 1.8rem; font-weight: 700; color: var(--primary);
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+        .logo-text span { color: var(--secondary); }
+
+        .nav-menu { display: flex; gap: 30px; }
+
+        .nav-link {
+            font-size: 1rem; color: var(--text-dark); font-weight: 500; position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active { color: var(--secondary); }
+        
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -5px; left: 0; background-color: var(--secondary); transition: 0.3s;
+        }
+        
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+        .btn-booking {
+            padding: 10px 25px; background-color: var(--primary); color: var(--white);
+            border-radius: 50px; font-weight: 500;
+        }
+        .btn-booking:hover { background-color: var(--secondary); }
+
+        /* --- 3. PAGE HEADER (Sub-page Style) --- */
+        /* ปรับให้เตี้ยลงกว่าหน้าแรก เพื่อเน้นเนื้อหา */
+        .page-header {
+            height: 50vh;
+            background: linear-gradient(rgba(21, 62, 53, 0.6), rgba(21, 62, 53, 0.6)),
+                        url('https://images.unsplash.com/photo-1594817926978-2947264af036?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center 30%; /* จัดตำแหน่งภาพ */
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; color: var(--white);
+        }
+
+        .page-header h1 { font-size: 4rem; margin-bottom: 10px; }
+        .page-header p { font-size: 1.2rem; font-weight: 300; letter-spacing: 1px; }
+
+        /* --- 4. FILTER SECTION --- */
+        .filter-section {
+            padding: 50px 5% 20px;
+            text-align: center;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            margin: 0 5px;
+            border: 1px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            font-family: 'Prompt', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        /* --- 5. PLACES GRID --- */
+        .section { padding: 40px 5% 80px; }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* กว้างขึ้นนิดหน่อย */
+            gap: 40px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: 0.4s;
+            cursor: pointer;
+            opacity: 1; /* For animation */
+        }
+        
+        /* Effect for Filtering: Hide/Show */
+        .card.hide { display: none; }
+
+        .card:hover { transform: translateY(-10px); }
+
+        .card-img {
+            height: 280px; /* รูปสูงกว่าหน้าแรกนิดหน่อย */
+            background-color: #ddd; position: relative;
+        }
+        
+        .card-img img { width: 100%; height: 100%; object-fit: cover; }
+
+        .category-tag {
+            position: absolute; top: 20px; right: 20px;
+            background-color: var(--secondary); color: var(--white);
+            padding: 5px 15px; font-size: 0.8rem; border-radius: 50px;
+            font-weight: 500;
+        }
+
+        .card-info { padding: 30px; }
+
+        .card-title { font-size: 1.6rem; color: var(--primary); margin-bottom: 10px; }
+        
+        .card-location {
+            color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        .card-desc { font-size: 0.95rem; color: var(--text-dark); margin-bottom: 25px; opacity: 0.8; }
+
+        .card-btn {
+            display: inline-block; padding: 10px 0;
+            color: var(--primary); font-weight: 600; border-bottom: 2px solid var(--secondary);
+        }
+        .card-btn:hover { color: var(--secondary); }
+
+        /* --- 6. FOOTER (Shared) --- */
+        footer {
+            background-color: var(--primary); color: var(--white);
+            text-align: center; padding: 40px;
+        }
+
+        /* Mobile */
+        .hamburger { display: none; cursor: pointer; font-size: 1.5rem; }
+        @media (max-width: 768px) {
+            .navbar { padding: 0 20px; }
+            .hamburger { display: block; }
+            .nav-menu {
+                position: absolute; top: 80px; left: -100%; width: 100%;
+                background-color: var(--white); flex-direction: column;
+                align-items: center; padding: 40px 0; transition: 0.4s;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            .nav-menu.active { left: 0; }
+            .page-header h1 { font-size: 3rem; }
+            .card-grid { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">
+            <i class="fas fa-gem" style="font-size: 24px; color: var(--secondary);"></i> 
+            <a href="index.html" class="logo-text">YALA <span>PRIDE</span></a>
+        </div>
+
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="index.html" class="nav-link">หน้าแรก</a></li>
+            <li><a href="places.html" class="nav-link active">สถานที่ท่องเที่ยว</a></li>
+            <li><a href="#" class="nav-link">วัฒนธรรม</a></li>
+            <li><a href="#" class="nav-link">อาหาร</a></li>
+            <li><a href="#" class="btn-booking">ติดต่อเรา</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header">
+        <h1>Discover Yala</h1>
+        <p>ค้นพบความงามที่ซ่อนอยู่ในดินแดนปลายด้ามขวาน</p>
+    </header>
+
+    <div class="filter-section">
+        <button class="filter-btn active" onclick="filterSelection('all')">ทั้งหมด</button>
+        <button class="filter-btn" onclick="filterSelection('nature')">ธรรมชาติ</button>
+        <button class="filter-btn" onclick="filterSelection('history')">ประวัติศาสตร์</button>
+        <button class="filter-btn" onclick="filterSelection('city')">ในเมือง</button>
+    </div>
+
+    <section class="section">
+        <div class="card-grid">
+            
+            <div class="card nature">
+                <div class="card-img">
+                    <span class="category-tag">ธรรมชาติ</span>
+                    <img src="https://images.unsplash.com/photo-1594817926978-2947264af036?q=80&w=800&auto=format&fit=crop" alt="Skywalk">
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Skywalk Ayerweng</h3>
+                    <div class="card-location"><i class="fas fa-map-marker-alt"></i> อ.เบตง</div>
+                    <p class="card-desc">สกายวอร์คกระจกใสยื่นผาสูง ชมทะเลหมอกได้ตลอดทั้งปี ไฮไลท์ที่ห้ามพลาดเมื่อมายะลา</p>
+                    <a href="#" class="card-btn">อ่านเพิ่มเติม</a>
+                </div>
+            </div>
+
+            <div class="card history">
+                <div class="card-img">
+                    <span class="category-tag">ประวัติศาสตร์</span>
+                    <img src="https://images.unsplash.com/photo-1627918376518-e3952f9b8c9d?q=80&w=800&auto=format&fit=crop" alt="Tunnel">
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">อุโมงค์ปิยะมิตร</h3>
+                    <div class="card-location"><i class="fas fa-map-marker-alt"></i> อ.เบตง</div>
+                    <p class="card-desc">อุโมงค์ดินในอดีตฐานที่มั่นโจรจีนคอมมิวนิสต์ รายล้อมด้วยป่าทึบและต้นไม้พันปี</p>
+                    <a href="#" class="card-btn">อ่านเพิ่มเติม</a>
+                </div>
+            </div>
+
+            <div class="card city">
+                <div class="card-img">
+                    <span class="category-tag">ในเมือง</span>
+                    <img src="https://plus.unsplash.com/premium_photo-1697729901015-812048999335?q=80&w=800&auto=format&fit=crop" alt="City Pillar">
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">ศาลหลักเมืองยะลา</h3>
+                    <div class="card-location"><i class="fas fa-map-marker-alt"></i> อ.เมือง</div>
+                    <p class="card-desc">ศูนย์รวมจิตใจของชาวยะลา ตั้งอยู่กลางวงเวียนผังเมืองใยแมงมุมที่สวยที่สุด</p>
+                    <a href="#" class="card-btn">อ่านเพิ่มเติม</a>
+                </div>
+            </div>
+
+            <div class="card nature">
+                <div class="card-img">
+                    <span class="category-tag">ธรรมชาติ</span>
+                    <img src="https://images.unsplash.com/photo-1504280509247-0310476f755c?q=80&w=800&auto=format&fit=crop" alt="Dam">
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">เขื่อนบางลาง</h3>
+                    <div class="card-location"><i class="fas fa-map-marker-alt"></i> อ.บันนังสตา</div>
+                    <p class="card-desc">ล่องแพชมทัศนียภาพเหนือเขื่อน กุ้ยหลินเมืองไทย สัมผัสความสงบแห่งสายน้ำ</p>
+                    <a href="#" class="card-btn">อ่านเพิ่มเติม</a>
+                </div>
+            </div>
+
+            <div class="card city">
+                <div class="card-img">
+                    <span class="category-tag">ไลฟ์สไตล์</span>
+                    <img src="https://images.unsplash.com/photo-1582467026727-4a7b5d252445?q=80&w=800&auto=format&fit=crop" alt="Street Art">
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Betong Street Art</h3>
+                    <div class="card-location"><i class="fas fa-map-marker-alt"></i> อ.เบตง</div>
+                    <p class="card-desc">เดินชมงานศิลปะบนผนังตึกเก่า เล่าเรื่องราววิถีชีวิตพหุวัฒนธรรมของชาวเบตง</p>
+                    <a href="#" class="card-btn">อ่านเพิ่มเติม</a>
+                </div>
+            </div>
+
+             <div class="card nature">
+                <div class="card-img">
+                    <span class="category-tag">ธรรมชาติ</span>
+                    <img src="https://images.unsplash.com/photo-1563784462386-044fd922744a?q=80&w=800&auto=format&fit=crop" alt="Hot Spring">
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">บ่อน้ำพุร้อนเบตง</h3>
+                    <div class="card-location"><i class="fas fa-map-marker-alt"></i> อ.เบตง</div>
+                    <p class="card-desc">ผ่อนคลายด้วยการแช่น้ำแร่ธรรมชาติ ท่ามกลางหุบเขา อุณหภูมิอุ่นสบายดีต่อสุขภาพ</p>
+                    <a href="#" class="card-btn">อ่านเพิ่มเติม</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div style="font-size: 2rem; margin-bottom: 20px; font-family: 'Cormorant Garamond', serif;">
+            YALA PRIDE
+        </div>
+        <div style="margin-bottom: 20px;">
+            <i class="fab fa-facebook fa-lg" style="margin: 0 10px;"></i>
+            <i class="fab fa-instagram fa-lg" style="margin: 0 10px;"></i>
+            <i class="fab fa-twitter fa-lg" style="margin: 0 10px;"></i>
+        </div>
+        <p>&copy; 2024 Yala Provincial Tourism. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Navbar Mobile Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Filter Function (สคริปต์สำหรับกรองข้อมูล)
+        function filterSelection(category) {
+            var cards = document.getElementsByClassName("card");
+            var btns = document.getElementsByClassName("filter-btn");
+            
+            // 1. จัดการปุ่ม Active
+            // ลบ active จากทุกปุ่ม แล้วใส่ใหม่เฉพาะปุ่มที่กด
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].classList.remove("active");
+                if (event.target == btns[i]) {
+                    btns[i].classList.add("active");
+                }
+            }
+
+            // 2. แสดง/ซ่อน การ์ด
+            if (category == "all") {
+                for (var i = 0; i < cards.length; i++) {
+                    cards[i].classList.remove("hide");
+                }
+            } else {
+                for (var i = 0; i < cards.length; i++) {
+                    if (cards[i].classList.contains(category)) {
+                        cards[i].classList.remove("hide");
+                    } else {
+                        cards[i].classList.add("hide");
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
